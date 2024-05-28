@@ -3,7 +3,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
@@ -11,13 +11,17 @@ body {
 
 h1 {
     text-align: center;
+    margin: 0;
+    padding-top: 10vh; /* 10% from the top */
 }
 
 hr {
     width: 100%;
     border: 1px solid black;
+    margin: 0; /* Optional: to remove any default margin */
 }
 
 p {
     text-align: center;
+    margin-top: 20px; /* Add some space between the line and the paragraph */
 }
