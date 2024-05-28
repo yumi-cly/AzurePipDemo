@@ -22,8 +22,8 @@ h1 {
 
 hr {
     width: 100%;
-    border: 1px solid black;
-    margin: 0; /* Optional: to remove any default margin */
+    border: 1px solid grey;
+    margin: 10; /* Optional: to remove any default margin */
 }
 
 p {
