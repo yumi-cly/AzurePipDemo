@@ -56,7 +56,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'eldongpipelinesjavascriptdocker.default'
+    environment: 'prod.default'
     strategy:
       runOnce:
         deploy:
@@ -86,7 +86,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
-    environment: 'eldongpipelinesjavascriptdocker.$(k8sNamespaceForPR)'
+    environment: 'prod.$(k8sNamespaceForPR)'
     strategy:
       runOnce:
         deploy:
