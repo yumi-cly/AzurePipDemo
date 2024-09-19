@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: vectorjaypipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vectorjaypipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: vectorjaypipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: vectorjaypipelinesjavascriptdocker 
+          image: testcontanerreg.azurecr.io/vectorjaypipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
