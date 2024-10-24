@@ -15,5 +15,6 @@ spec:
       containers:
         - name: kalyankrishnapipelinesjavascriptdocker 
           image: securecloudcontainerregistry.azurecr.io/kalyankrishnapipelinesjavascriptdocker
+          imagePullPolicy: Always
           ports:
           - containerPort: 8080
