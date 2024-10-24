@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: kalyankrishnapipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kalyankrishnapipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: kalyankrishnapipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: kalyankrishnapipelinesjavascriptdocker 
+          image: securecloudcontainerregistry.azurecr.io/kalyankrishnapipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
