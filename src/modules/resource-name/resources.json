@@ -1,0 +1,1174 @@
+[
+    {
+      "FullName": "AI Search",
+      "API": "Microsoft.Search/searchServices",
+      "ShortName": "srch",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure AI services multi-service account",
+      "API": "Microsoft.CognitiveServices/accounts (kind: CognitiveServices",
+      "ShortName": "aisa",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure AI Video Indexer",
+      "API": "Microsoft.VideoIndexer/accounts",
+      "ShortName": "avi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Machine Learning workspace",
+      "API": "Microsoft.MachineLearningServices/workspaces",
+      "ShortName": "mlw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure OpenAI Service",
+      "API": "Microsoft.CognitiveServices/accounts (kind: OpenAI",
+      "ShortName": "oai",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Bot service",
+      "API": "Microsoft.BotService/botServices (kind: azurebot",
+      "ShortName": "bot",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Computer vision",
+      "API": "Microsoft.CognitiveServices/accounts (kind: ComputerVision",
+      "ShortName": "cv",
+      "UseShortForm": false    
+    },
+    {
+      "FullName": "Content moderator",
+      "API": "Microsoft.CognitiveServices/accounts (kind: ContentModerator",
+      "ShortName": "cm",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Content safety",
+      "API": "Microsoft.CognitiveServices/accounts (kind: ContentSafety",
+      "ShortName": "cs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Custom vision (prediction)",
+      "API": "Microsoft.CognitiveServices/accounts (kind: CustomVision.Prediction",
+      "ShortName": "cstv",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Custom vision (training)",
+      "API": "Microsoft.CognitiveServices/accounts (kind: CustomVision.Training",
+      "ShortName": "cstvt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Document intelligence",
+      "API": "Microsoft.CognitiveServices/accounts (kind: FormRecognizer",
+      "ShortName": "di",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Face API",
+      "API": "Microsoft.CognitiveServices/accounts (kind: Face",
+      "ShortName": "face",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Health Insights",
+      "API": "Microsoft.CognitiveServices/accounts (kind: HealthInsights",
+      "ShortName": "hi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Immersive reader",
+      "API": "Microsoft.CognitiveServices/accounts (kind: ImmersiveReader",
+      "ShortName": "ir",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Language service",
+      "API": "Microsoft.CognitiveServices/accounts (kind: TextAnalytics",
+      "ShortName": "lang",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Speech service",
+      "API": "Microsoft.CognitiveServices/accounts (kind: SpeechServices",
+      "ShortName": "spch",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Translator",
+      "API": "Microsoft.CognitiveServices/accounts (kind: TextTranslation) ",
+      "ShortName": "trsl",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Analysis Services server",
+      "API": "Microsoft.AnalysisServices/servers",
+      "ShortName": "asserv",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Databricks workspace",
+      "API": "Microsoft.Databricks/workspaces",
+      "ShortName": "dbw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Data Explorer cluster",
+      "API": "Microsoft.Kusto/clusters",
+      "ShortName": "dec",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Data Explorer cluster database",
+      "API": "Microsoft.Kusto/clusters/databases",
+      "ShortName": "dedb",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Data Factory",
+      "API": "Microsoft.DataFactory/factories",
+      "ShortName": "adf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Digital Twin instance",
+      "API": "Microsoft.DigitalTwins/digitalTwinsInstances",
+      "ShortName": "dt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Stream Analytics",
+      "API": "Microsoft.StreamAnalytics/cluster",
+      "ShortName": "asa",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Synapse Analytics private link hub",
+      "API": "Microsoft.Synapse/privateLinkHubs",
+      "ShortName": "synplh",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Synapse Analytics SQL Dedicated Pool",
+      "API": "Microsoft.Synapse/workspaces/sqlPools",
+      "ShortName": "syndp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Synapse Analytics Spark Pool",
+      "API": "Microsoft.Synapse/workspaces/bigDataPools",
+      "ShortName": "synsp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Synapse Analytics workspaces",
+      "API": "Microsoft.Synapse/workspaces",
+      "ShortName": "synw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Data Lake Store account",
+      "API": "Microsoft.DataLakeStore/accounts",
+      "ShortName": "dls",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Data Lake Analytics account",
+      "API": "Microsoft.DataLakeAnalytics/accounts",
+      "ShortName": "dla",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event Hubs namespace",
+      "API": "Microsoft.EventHub/namespaces",
+      "ShortName": "evhns",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event hub",
+      "API": "Microsoft.EventHub/namespaces/eventHubs",
+      "ShortName": "evh",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event Grid domain",
+      "API": "Microsoft.EventGrid/domains",
+      "ShortName": "evgd",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event Grid subscriptions",
+      "API": "Microsoft.EventGrid/eventSubscriptions",
+      "ShortName": "evgs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event Grid topic",
+      "API": "Microsoft.EventGrid/domains/topics",
+      "ShortName": "evgt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Event Grid system topic",
+      "API": "Microsoft.EventGrid/systemTopics",
+      "ShortName": "egst",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - Hadoop cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "hadoop",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - HBase cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "hbase",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - Kafka cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "kafka",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - Spark cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "spark",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - Storm cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "storm",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "HDInsight - ML Services cluster",
+      "API": "Microsoft.HDInsight/clusters",
+      "ShortName": "mls",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "IoT hub",
+      "API": "Microsoft.Devices/IotHubs",
+      "ShortName": "iot",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Provisioning services",
+      "API": "Microsoft.Devices/provisioningServices",
+      "ShortName": "provs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Provisioning services certificate",
+      "API": "Microsoft.Devices/provisioningServices/certificates",
+      "ShortName": "pcert",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Power BI Embedded",
+      "API": "Microsoft.PowerBIDedicated/capacities",
+      "ShortName": "pbi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Time Series Insights environment",
+      "API": "Microsoft.TimeSeriesInsights/environments",
+      "ShortName": "tsi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "App Service environment",
+      "API": "Microsoft.Web/hostingEnvironments",
+      "ShortName": "ase",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "App Service plan",
+      "API": "Microsoft.Web/serverFarms",
+      "ShortName": "asp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Load Testing instance",
+      "API": "Microsoft.LoadTestService/loadTests",
+      "ShortName": "lt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Availability set",
+      "API": "Microsoft.Compute/availabilitySets",
+      "ShortName": "avail",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Arc enabled server",
+      "API": "Microsoft.HybridCompute/machines",
+      "ShortName": "arcs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Arc enabled Kubernetes cluster",
+      "API": "Microsoft.Kubernetes/connectedClusters",
+      "ShortName": "arck",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Batch accounts",
+      "API": "Microsoft.Batch/batchAccounts",
+      "ShortName": "ba",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Cloud service",
+      "API": "Microsoft.Compute/cloudServices",
+      "ShortName": "cld",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Communication Services",
+      "API": "Microsoft.Communication/communicationServices",
+      "ShortName": "acs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Disk encryption set",
+      "API": "Microsoft.Compute/diskEncryptionSets",
+      "ShortName": "des",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Function app",
+      "API": "Microsoft.Web/sites",
+      "ShortName": "func",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Gallery",
+      "API": "Microsoft.Compute/galleries",
+      "ShortName": "gal",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Hosting environment",
+      "API": "Microsoft.Web/hostingEnvironments",
+      "ShortName": "host",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Image template",
+      "API": "Microsoft.VirtualMachineImages/imageTemplates",
+      "ShortName": "it",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Managed disk (OS)",
+      "API": "Microsoft.Compute/disks",
+      "ShortName": "osdisk",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Managed disk (data)",
+      "API": "Microsoft.Compute/disks",
+      "ShortName": "disk",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Notification Hubs",
+      "API": "Microsoft.NotificationHubs/namespaces/notificationHubs",
+      "ShortName": "ntf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Notification Hubs namespace",
+      "API": "Microsoft.NotificationHubs/namespaces",
+      "ShortName": "ntfns",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Proximity placement group",
+      "API": "Microsoft.Compute/proximityPlacementGroups",
+      "ShortName": "ppg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Restore point collection",
+      "API": "Microsoft.Compute/restorePointCollections",
+      "ShortName": "rpc",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Snapshot",
+      "API": "Microsoft.Compute/snapshots",
+      "ShortName": "snap",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Static web app",
+      "API": "Microsoft.Web/staticSites",
+      "ShortName": "stapp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual machine",
+      "API": "Microsoft.Compute/virtualMachines",
+      "ShortName": "vm",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Virtual machine scale set",
+      "API": "Microsoft.Compute/virtualMachineScaleSets",
+      "ShortName": "vmss",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "VM Scale Set Prefix",
+      "API": "Microsoft.Compute/virtualMachineScaleSets",
+      "ShortName": "vmprefix",
+      "CustomFormatString": "{0}{1}",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Virtual machine maintenance configuration",
+      "API": "Microsoft.Maintenance/maintenanceConfigurations",
+      "ShortName": "mc",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "VM storage account",
+      "API": "Microsoft.Storage/storageAccounts",
+      "ShortName": "stvm",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Web app",
+      "API": "Microsoft.Web/sites",
+      "ShortName": "app",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "AKS cluster",
+      "API": "Microsoft.ContainerService/managedClusters",
+      "ShortName": "aks",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "AKS system node pool",
+      "API": "Microsoft.ContainerService/managedClusters/agentPools (mode: \"System\")",
+      "ShortName": "npsystem",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "AKS user node pool",
+      "API": "Microsoft.ContainerService/managedClusters/agentPools (mode: \"User\")",
+      "ShortName": "np",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Container apps",
+      "API": "Microsoft.App/containerApps",
+      "ShortName": "ca",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Container apps environment",
+      "API": "Microsoft.App/managedEnvironments",
+      "ShortName": "cae",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Container registry",
+      "API": "Microsoft.ContainerRegistry/registries",
+      "ShortName": "cr",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Container instance",
+      "API": "Microsoft.ContainerInstance/containerGroups",
+      "ShortName": "ci",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Fabric cluster",
+      "API": "Microsoft.ServiceFabric/clusters",
+      "ShortName": "sf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Fabric managed cluster",
+      "API": "Microsoft.ServiceFabric/managedClusters",
+      "ShortName": "sfmc",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB database",
+      "API": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "ShortName": "cosmos",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB for Apache Cassandra account",
+      "API": "Microsoft.DocumentDB/databaseAccounts",
+      "ShortName": "coscas",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB for MongoDB account",
+      "API": "Microsoft.DocumentDB/databaseAccounts",
+      "ShortName": "cosmon",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB for NoSQL account",
+      "API": "Microsoft.DocumentDb/databaseAccounts",
+      "ShortName": "cosno",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB for Table account",
+      "API": "Microsoft.DocumentDb/databaseAccounts",
+      "ShortName": "costab",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB for Apache Gremlin account",
+      "API": "Microsoft.DocumentDb/databaseAccounts",
+      "ShortName": "cosgrm",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cosmos DB PostgreSQL cluster",
+      "API": "Microsoft.DBforPostgreSQL/serverGroupsv2",
+      "ShortName": "cospos",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Cache for Redis instance",
+      "API": "Microsoft.Cache/Redis",
+      "ShortName": "redis",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure SQL Database server",
+      "API": "Microsoft.Sql/servers",
+      "ShortName": "sql",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure SQL database",
+      "API": "Microsoft.Sql/servers/databases",
+      "ShortName": "sqldb",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure SQL Elastic Job agent",
+      "API": "Microsoft.Sql/servers/jobAgents",
+      "ShortName": "sqlja",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure SQL Elastic Pool",
+      "API": "Microsoft.Sql/servers/elasticpool",
+      "ShortName": "sqlep",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "MariaDB server",
+      "API": "Microsoft.DBforMariaDB/servers",
+      "ShortName": "maria",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "MariaDB database",
+      "API": "Microsoft.DBforMariaDB/servers/databases",
+      "ShortName": "mariadb",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "MySQL database",
+      "API": "Microsoft.DBforMySQL/servers",
+      "ShortName": "mysql",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "PostgreSQL database",
+      "API": "Microsoft.DBforPostgreSQL/servers",
+      "ShortName": "psql",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "SQL Server Stretch Database",
+      "API": "Microsoft.Sql/servers/databases",
+      "ShortName": "sqlstrdb",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "SQL Managed Instance",
+      "API": "Microsoft.Sql/managedInstances",
+      "ShortName": "sqlmi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "App Configuration store",
+      "API": "Microsoft.AppConfiguration/configurationStores",
+      "ShortName": "appcs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Maps account",
+      "API": "Microsoft.Maps/accounts",
+      "ShortName": "map",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "SignalR",
+      "API": "Microsoft.SignalRService/SignalR",
+      "ShortName": "sigr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "WebPubSub",
+      "API": "Microsoft.SignalRService/webPubSub",
+      "ShortName": "wps",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Managed Grafana",
+      "API": "Microsoft.Dashboard/grafana",
+      "ShortName": "amg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "API management service instance",
+      "API": "Microsoft.ApiManagement/service",
+      "ShortName": "apim",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Integration account",
+      "API": "Microsoft.Logic/integrationAccounts",
+      "ShortName": "ia",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Logic app",
+      "API": "Microsoft.Logic/workflows",
+      "ShortName": "logic",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Bus namespace",
+      "API": "Microsoft.ServiceBus/namespaces",
+      "ShortName": "sbns",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Bus queue",
+      "API": "Microsoft.ServiceBus/namespaces/queues",
+      "ShortName": "sbq",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Bus topic",
+      "API": "Microsoft.ServiceBus/namespaces/topics",
+      "ShortName": "sbt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service Bus topic subscription",
+      "API": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+      "ShortName": "sbts",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Automation account",
+      "API": "Microsoft.Automation/automationAccounts",
+      "ShortName": "aa",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Application Insights",
+      "API": "Microsoft.Insights/components",
+      "ShortName": "appi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Monitor action group",
+      "API": "Microsoft.Insights/actionGroups",
+      "ShortName": "ag",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Monitor data collection rules",
+      "API": "Microsoft.Insights/dataCollectionRules",
+      "ShortName": "dcr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Blueprint",
+      "API": "Microsoft.Blueprint/blueprints",
+      "ShortName": "bp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Blueprint assignment",
+      "API": "Microsoft.Blueprint/blueprints/artifacts",
+      "ShortName": "bpa",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Data collection endpoint",
+      "API": "Microsoft.Insights/dataCollectionEndpoints",
+      "ShortName": "dce",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Log Analytics workspace",
+      "API": "Microsoft.OperationalInsights/workspaces",
+      "ShortName": "log",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Log Analytics query packs",
+      "API": "Microsoft.OperationalInsights/querypacks",
+      "ShortName": "pack",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Management group",
+      "API": "Microsoft.Management/managementGroups",
+      "ShortName": "mg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Microsoft Purview instance",
+      "API": "Microsoft.Purview/accounts",
+      "ShortName": "pview",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Resource group",
+      "API": "Microsoft.Resources/resourceGroups",
+      "ShortName": "rg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Template specs name",
+      "API": "Microsoft.Resources/templateSpecs",
+      "ShortName": "ts",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Migrate project",
+      "API": "Microsoft.Migrate/assessmentProjects",
+      "ShortName": "migr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Database Migration Service instance",
+      "API": "Microsoft.DataMigration/services",
+      "ShortName": "dms",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Recovery Services vault",
+      "API": "Microsoft.RecoveryServices/vaults",
+      "ShortName": "rsv",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Application gateway",
+      "API": "Microsoft.Network/applicationGateways",
+      "ShortName": "agw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Application security group (ASG)",
+      "API": "Microsoft.Network/applicationSecurityGroups",
+      "ShortName": "asg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "CDN profile",
+      "API": "Microsoft.Cdn/profiles",
+      "ShortName": "cdnp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "CDN endpoint",
+      "API": "Microsoft.Cdn/profiles/endpoints",
+      "ShortName": "cdne",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Connections",
+      "API": "Microsoft.Network/connections",
+      "ShortName": "con",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "DNS forwarding ruleset",
+      "API": "Microsoft.Network/dnsForwardingRulesets",
+      "ShortName": "dnsfrs",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "DNS private resolver",
+      "API": "Microsoft.Network/dnsResolvers",
+      "ShortName": "dnspr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "DNS private resolver inbound endpoint",
+      "API": "Microsoft.Network/dnsResolvers/inboundEndpoints",
+      "ShortName": "in",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "DNS private resolver outbound endpoint",
+      "API": "Microsoft.Network/dnsResolvers/outboundEndpoints",
+      "ShortName": "out",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Firewall",
+      "API": "Microsoft.Network/azureFirewalls",
+      "ShortName": "afw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Firewall policy",
+      "API": "Microsoft.Network/firewallPolicies",
+      "ShortName": "afwp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "ExpressRoute circuit",
+      "API": "Microsoft.Network/expressRouteCircuits",
+      "ShortName": "erc",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "ExpressRoute gateway",
+      "API": "Microsoft.Network/virtualNetworkGateways",
+      "ShortName": "ergw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Front Door (Standard/Premium) profile",
+      "API": "Microsoft.Cdn/profiles",
+      "ShortName": "afd",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Front Door (Standard/Premium) endpoint",
+      "API": "Microsoft.Cdn/profiles/afdEndpoints",
+      "ShortName": "fde",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Front Door firewall policy",
+      "API": "Microsoft.Network/frontdoorWebApplicationFirewallPolicies",
+      "ShortName": "fdfp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "IP group",
+      "API": "Microsoft.Network/ipGroups",
+      "ShortName": "ipg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Load balancer (internal)",
+      "API": "Microsoft.Network/loadBalancers",
+      "ShortName": "lbi",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Load balancer (external)",
+      "API": "Microsoft.Network/loadBalancers",
+      "ShortName": "lbe",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Load balancer rule",
+      "API": "Microsoft.Network/loadBalancers/inboundNatRules",
+      "ShortName": "rule",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Local network gateway",
+      "API": "Microsoft.Network/localNetworkGateways",
+      "ShortName": "lgw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "NAT gateway",
+      "API": "Microsoft.Network/natGateways",
+      "ShortName": "ng",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Network interface (NIC)",
+      "API": "Microsoft.Network/networkInterfaces",
+      "ShortName": "nic",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Network security group (NSG)",
+      "API": "Microsoft.Network/networkSecurityGroups",
+      "ShortName": "nsg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Network security group (NSG) security rules",
+      "API": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "ShortName": "nsgsr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Network Watcher",
+      "API": "Microsoft.Network/networkWatchers",
+      "ShortName": "nw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Private Link",
+      "API": "Microsoft.Network/privateLinkServices",
+      "ShortName": "pl",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Private endpoint",
+      "API": "Microsoft.Network/privateEndpoints",
+      "ShortName": "pep",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Public IP address",
+      "API": "Microsoft.Network/publicIPAddresses",
+      "ShortName": "pip",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Public IP address prefix",
+      "API": "Microsoft.Network/publicIPPrefixes",
+      "ShortName": "ippre",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Route filter",
+      "API": "Microsoft.Network/routeFilters",
+      "ShortName": "rf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Route server",
+      "API": "Microsoft.Network/virtualHubs",
+      "ShortName": "rtserv",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Route table",
+      "API": "Microsoft.Network/routeTables",
+      "ShortName": "rt",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Service endpoint policy",
+      "API": "Microsoft.serviceEndPointPolicies",
+      "ShortName": "se",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Traffic Manager profile",
+      "API": "Microsoft.Network/trafficManagerProfiles",
+      "ShortName": "traf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "User defined route (UDR)",
+      "API": "Microsoft.Network/routeTables/routes",
+      "ShortName": "udr",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual network",
+      "API": "Microsoft.Network/virtualNetworks",
+      "ShortName": "vnet",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual network gateway",
+      "API": "Microsoft.Network/virtualNetworkGateways",
+      "ShortName": "vgw",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual network manager",
+      "API": "Microsoft.Network/networkManagers",
+      "ShortName": "vnm",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual network peering",
+      "API": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "ShortName": "peer",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual network subnet",
+      "API": "Microsoft.Network/virtualNetworks/subnets",
+      "ShortName": "snet",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual WAN",
+      "API": "Microsoft.Network/virtualWans",
+      "ShortName": "vwan",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual WAN Hub",
+      "API": "Microsoft.Network/virtualHubs",
+      "ShortName": "vhub",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Bastion",
+      "API": "Microsoft.Network/bastionHosts",
+      "ShortName": "bas",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Key vault",
+      "API": "Microsoft.KeyVault/vaults",
+      "ShortName": "kv",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Key Vault Managed HSM",
+      "API": "Microsoft.KeyVault/managedHSMs",
+      "ShortName": "kvmhsm",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Managed identity",
+      "API": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "ShortName": "id",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "SSH key",
+      "API": "Microsoft.Compute/sshPublicKeys",
+      "ShortName": "sshkey",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "VPN Gateway",
+      "API": "Microsoft.Network/vpnGateways",
+      "ShortName": "vpng",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "VPN connection",
+      "API": "Microsoft.Network/vpnGateways/vpnConnections",
+      "ShortName": "vcn",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "VPN site",
+      "API": "Microsoft.Network/vpnGateways/vpnSites",
+      "ShortName": "vst",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Web Application Firewall (WAF) policy",
+      "API": "Microsoft.Network/firewallPolicies",
+      "ShortName": "waf",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Web Application Firewall (WAF) policy rule group",
+      "API": "Microsoft.Network/firewallPolicies/ruleGroups",
+      "ShortName": "wafrg",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure StorSimple",
+      "API": "Microsoft.StorSimple/managers",
+      "ShortName": "ssimp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Backup Vault name",
+      "API": "Microsoft.DataProtection/backupVaults",
+      "ShortName": "bvault",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Backup Vault policy",
+      "API": "Microsoft.DataProtection/backupVaults/backupPolicies",
+      "ShortName": "bkpol",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "File share",
+      "API": "Microsoft.Storage/storageAccounts/fileServices/shares",
+      "ShortName": "share",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Storage account",
+      "API": "Microsoft.Storage/storageAccounts",
+      "ShortName": "st",
+      "UseShortForm": true
+    },
+    {
+      "FullName": "Storage Sync Service name",
+      "API": "Microsoft.StorageSync/storageSyncServices",
+      "ShortName": "sss",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Azure Lab Services lab plan",
+      "API": "Microsoft.LabServices/labPlans",
+      "ShortName": "lp",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual desktop host pool",
+      "API": "Microsoft.DesktopVirtualization/hostPools",
+      "ShortName": "vdpool",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual desktop application group",
+      "API": "Microsoft.DesktopVirtualization/applicationGroups",
+      "ShortName": "vdag",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual desktop workspace",
+      "API": "Microsoft.DesktopVirtualization/workspaces",
+      "ShortName": "vdws",
+      "UseShortForm": false
+    },
+    {
+      "FullName": "Virtual desktop scaling plan",
+      "API": "Microsoft.DesktopVirtualization/scalingPlans",
+      "ShortName": "vdscaling",
+      "UseShortForm": false
+    }
+  ]
+  

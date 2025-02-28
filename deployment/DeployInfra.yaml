@@ -1,0 +1,199 @@
+trigger: none
+
+pool: 'On-Prem-General'
+
+parameters:
+- name: environment
+  displayName: "Environment"
+  default: "Dev"
+  type: string
+  values:
+  - "Dev"  
+  - "Staging"
+  - "Prod" 
+ 
+- name: sequenceNumber
+  displayName: "Sequence number to use in the resource naming."
+  default: '03'
+ 
+- name: deployKeyVault
+  displayName: "Deploy Key vault"
+  default: false
+  type: boolean
+
+- name: deployAzureStorage
+  displayName: "Deploy Azure Storage"
+  default: false
+  type: boolean
+
+- name: location
+  displayName: "Azure Region"
+  default: 'WestUS2'
+  values:
+  - "WestUS2"
+  - "SouthCentralUS"
+
+- name: printDiagnostics
+  displayName: "Print diagnostics"
+  default: true
+  type: boolean
+
+variables:
+  Major: $[ format('{0:yyyy}', pipeline.startTime) ]
+  Minor: $[ format('{0:MM}', pipeline.startTime) ]
+  Patch: $[ format('{0:dd}', pipeline.startTime) ]
+  gitsha: '$(Build.SourceVersion)'
+  standardVersion: $[variables['Build.BuildNumber']]
+  srcDir: 'src'
+  testsDir: 'tests'
+  group: MCA.CLM.${{ parameters.environment }}
+  deploymentDate: $[format('{0:dd}.{0:MM}.{0:yyyy}', pipeline.startTime)]
+  deploymentDateTimeStamp: $[format('{0:yyyyMMddHHmmss}', pipeline.startTime)]
+  #deploymentName: $[deployment().name]
+  #system.debug: 'true' # extremey noisy, useful when troubleshooting data inputs between calling modules
+  commonBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.common.bicep'
+  azStorageBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.azurestorage.bicep'
+  #template: "Params/deployInfraParams.${{ parameters.environment }}.yaml"
+  Minions_DevsGroupObjectId: '98525d4d-de1d-4985-a593-a9c116568045'
+
+  serviceConnectionName: 'pbc-vsts-Minions-dev-2p0'
+  resourceGroupName: 'rg-ContractLCMAutoDev-Minions-dev-westus2-01' # "Provide resource group destination for the deployment"
+  resourceGroupSubId: '59ef3d6b-57e9-4621-b22b-c8eb08a308e9'
+  sharedResourcesRg: 'rg-TeamShared-Minions-dev-westus2-01' # "Name of the resource group for components shared between apps"
+
+stages:
+- stage: Print_diagnostics
+  jobs:
+    - job: Print_diagnostics
+      displayName: Print diagnostics
+      condition: eq('${{ parameters.printDiagnostics }}', true)
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            version: '8.x'
+            performMultiLevelLookup: true
+ 
+        - script: cd
+          displayName: 'what directory are we in?'
+ 
+        - script: dir /a /q
+          displayName: 'what files are in source folder?'
+
+        - script: dir "$(Build.SourcesDirectory)\deployment" /a /q
+          displayName: 'what files are in the  deployment folder?'
+
+        - script: |
+            echo "SourcesDirectory is '$(Build.SourcesDirectory)'"
+            echo "commonBicepFilePath is '$(commonBicepFilePath)'"
+            echo "deploymentDate is '$(deploymentDate)'"
+            echo "deploymentDateTimeStamp is '$(deploymentDateTimeStamp)'"
+            echo "azStorageBicepFilePath is '$(azStorageBicepFilePath)'"
+            echo "serviceConnectionName is '$(serviceConnectionName)'"
+            echo "resourceGroupName is '$(resourceGroupName)'"
+            echo "resourceGroupSubId is '$(resourceGroupSubId)'"
+            echo "sharedResourcesRg is '$(sharedResourcesRg)'"
+            echo "Major Version is '$(Major)'"
+            echo "Minor version is '$(Minor)'"
+            echo "Patch is '$(Patch)'"
+            echo "gitsha is '$(gitsha)'"
+            echo "standardVersion is '$(standardVersion)'"
+            echo "name is '$(Build.BuildNumber)'"
+            echo "src folder is '$(srcDir)'"
+            echo "tests folder is '$(testsDir)'"
+            echo "Minions_DevsGroupObjectId folder is '$(Minions_DevsGroupObjectId)'"
+            echo "variable group is '$(group)'"
+            echo "Workspace is '$(Pipeline.Workspace)'"
+            echo "artifactStagingDirectory is '$(build.artifactStagingDirectory)'"            
+
+          displayName: 'Selected custom variables'
+ 
+        - ${{ each parameter in parameters }}:
+          - script: echo '${{ parameter.Key }} -> ${{ parameter.Value }}'
+            displayName: 'Printing parameters'
+
+    - job: Assign_Permissions
+      displayName: Assign permissions
+      condition: and(succeeded(), eq('${{ parameters.environment }}', 'Dev'), eq('${{ parameters.printDiagnostics }}', true))
+      steps:      
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: $(serviceConnectionName) 
+            scriptType: 'ps'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              'Get-AzAppConfigurationStoreKey -ResourceGroupName $(resourceGroupName) -Name appcs-mca-corps-dev-westus2-02 -SubscriptionId $(resourceGroupSubId)'
+
+        - task: AzureCLI@2
+          inputs:
+           azureSubscription: $(serviceConnectionName)
+           scriptType: 'ps'
+           scriptLocation: 'inlineScript'
+           inlineScript: |
+              az role assignment create --role Contributor --scope /subscriptions/$(resourceGroupSubId)/resourceGroups/$(resourceGroupName) --assignee-object-id $(Minions_DevsGroupObjectId) --assignee-principal-type Group --description "Role assignment to have contributor access to resource group"
+
+
+- stage: Prepare_Bicep_environment 
+  jobs:
+    - job: Bicep_Module_Deployment
+      condition: succeeded()
+      displayName: Load bicep modules
+      steps:
+        - task: AzureCLI@2
+          displayName: Restore Bicep Modules & Set Runtime Vars
+          inputs:
+            azureSubscription: ${{ variables.serviceConnectionName }}
+            addSpnToEnvironment: true
+            scriptType: 'pscore'
+            scriptLocation: inlineScript
+            inlineScript: |
+             bicep restore ${{ variables.commonBicepFilePath }} --force
+             bicep restore ${{ variables.azStorageBicepFilePath }} --force
+             Write-Host "##vso[task.setvariable variable=spnId]$env:servicePrincipalId"					# available via addSpnToEnvironment: true
+             Write-Host "##vso[task.setvariable variable=spnKey;issecret=true]$env:servicePrincipalKey" # available via addSpnToEnvironment: true
+             
+
+- stage: Deploy_Common_services
+  jobs:
+    - job: Deploy_Key_Vault
+      condition: succeeded()
+      displayName: Deploy Key Vault
+      variables:
+      - template: "EmptyTemplate.yaml" #if not provided, the premera common modules will barf!
+      steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Key vault
+        condition: eq('${{parameters.deployKeyVault}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: ${{ parameters.location }}
+         deploymentName: 'Deploy_Infra-${{ parameters.sequenceNumber }}-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: ${{ variables.commonBicepFilePath }}
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -location ${{ parameters.location }}
+           -environment ${{ parameters.environment }}
+           -identifier "kalyan${{ parameters.sequenceNumber }}"
+           -groupObjectId $(Minions_DevsGroupObjectId)
+
+      - task: PowerShell@2
+        name: 'SetDeploymentOutputVariables'
+        displayName: 'Set Deployment Output Variables'
+        #pwsh: true
+        inputs:
+          targetType: inline
+          script: |
+            $armOutputObj = '$(deploymentOutputs)' | ConvertFrom-Json
+            $armOutputObj.PSObject.Properties | ForEach-Object {
+              $keyname = $_.Name
+              $value = $_.Value.value
+
+              # Creates a standard pipeline variable
+              Write-Output "##vso[task.setvariable variable=$keyName;isoutput=true]$value"
+
+              # Display keys in pipeline
+              $outputstr = "output variable:'" + $keyName + "':'" + $value + "'"
+              Write-Output $outputstr
+            }
+      
