@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: xpipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xpipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: xpipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: xpipelinesjavascriptdocker 
+          image: mycontainerregistrylual123.azurecr.io/xpipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
