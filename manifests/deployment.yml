@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: sujanmaharjanpipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sujanmaharjanpipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: sujanmaharjanpipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: sujanmaharjanpipelinesjavascriptdocker 
+          image: mycontainerregistrysujan.azurecr.io/sujanmaharjanpipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
