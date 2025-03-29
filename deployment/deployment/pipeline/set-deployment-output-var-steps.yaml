@@ -1,0 +1,21 @@
+steps:
+- task: PowerShell@2
+  name: 'SetDeploymentOutputVariables'
+  displayName: 'Set Deployment Output Variables'
+  condition: succeeded()
+  #pwsh: true
+  inputs:
+    targetType: inline
+    script: |
+      $armOutputObj = '$(deploymentOutputs)' | ConvertFrom-Json
+      $armOutputObj.PSObject.Properties | ForEach-Object {
+        $keyname = $_.Name
+        $value = $_.Value.value
+
+        # Creates a standard pipeline variable
+        Write-Output "##vso[task.setvariable variable=$keyName;isoutput=true]$value"
+
+        # Display keys in pipeline
+        $outputstr = "output variable:'" + $keyName + "':'" + $value + "'"
+        Write-Output $outputstr
+      }

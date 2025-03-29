@@ -1,0 +1,48 @@
+steps:
+        - task: UseDotNet@2
+          inputs:
+            version: '8.x'
+            performMultiLevelLookup: true
+ 
+        - script: cd
+          displayName: 'what directory are we in?'
+ 
+        - script: dir /a /q
+          displayName: 'what files are in source folder?'
+
+        - script: dir "$(Build.SourcesDirectory)\deployment" /a /q
+          displayName: 'what files are in the  deployment folder?'
+
+        - script: |
+            echo "SourcesDirectory is '$(Build.SourcesDirectory)'"
+            echo "commonBicepFilePath is '$(commonBicepFilePath)'"
+            echo "deploymentDate is '$(deploymentDate)'"
+            echo "deploymentDateTimeStamp is '$(deploymentDateTimeStamp)'"
+            echo "azStorageBicepFilePath is '$(azStorageBicepFilePath)'"
+            echo "serviceConnectionName is '$(serviceConnectionName)'"
+            echo "resourceGroupName is '$(resourceGroupName)'"
+            echo "resourceGroupSubId is '$(resourceGroupSubId)'"
+            echo "sharedResourcesRg is '$(sharedResourcesRg)'"
+            echo "Major Version is '$(Major)'"
+            echo "Minor version is '$(Minor)'"
+            echo "Patch is '$(Patch)'"
+            echo "gitsha is '$(gitsha)'"
+            echo "standardVersion is '$(standardVersion)'"
+            echo "name is '$(Build.BuildNumber)'"
+            echo "src folder is '$(srcDir)'"
+            echo "tests folder is '$(testsDir)'"
+            echo "Minions_DevsGroupObjectId folder is '$(Minions_DevsGroupObjectId)'"
+            echo "variable group is '$(group)'"
+            echo "Workspace is '$(Pipeline.Workspace)'"
+            echo "artifactStagingDirectory is '$(build.artifactStagingDirectory)'"            
+            echo "sequenceNumber is '$(sequenceNumber)'"            
+            echo "applicationName is '$(applicationName)'"            
+            echo "departmentCode is '$(departmentCode)'"            
+            echo "enableHealthCheckMonitor is '$(enableHealthCheckMonitor)'"            
+            echo "serverFarmResourceId is '$(serverFarmResourceId)'"            
+
+          displayName: 'Selected custom variables'
+ 
+        - ${{ each parameter in parameters }}:
+          - script: echo '${{ parameter.Key }} -> ${{ parameter.Value }}'
+            displayName: 'Printing parameters'

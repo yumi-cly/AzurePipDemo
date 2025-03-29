@@ -1,0 +1,12 @@
+variables:
+  serviceConnectionName: 'pbc-vsts-Minions-prod-2p0' # "Provide service connection use for the deployment"
+  resourceGroupName: 'rg-ContractLCMAutoProd-Minions-prod-westus2-01' # "Provide resource group destination for the deployment"
+  resourceGroupSubId: '4bd3c86c-674b-4d77-a00a-0de64f6dfd43'
+  sharedResourcesRg: 'rg-TeamShared-Minions-prod-westus2-01' # "Name of the resource group for components shared between apps"
+  azureSubscriptionName: 'pbc-shared-prod'
+  resourceName: '{"applicationName":"CLM","departmentCode":"MCA","environment":"Prod","sequenceNumber":"01"}'
+  serverFarmResourceId: '/subscriptions/4bd3c86c-674b-4d77-a00a-0de64f6dfd43/resourceGroups/rg-TeamShared-Minions-prod-westus2-01/providers/Microsoft.Web/serverFarms/plan-TeamShared-Minions-prod-westus2-01'
+  sequenceNumber: '01'
+  apimResourceGroupName: 'rg-apim-shared-ecp-prod-westus2-01'
+  dmsStorageAccountName: 'stdmspdmsprdw201fwic' # "Provide the name of the storage account for DMS project"
+  funcAppVirtualNetworkSubnetId: '/subscriptions/4bd3c86c-674b-4d77-a00a-0de64f6dfd43/resourceGroups/rg-shared-prod-westus2-01/providers/Microsoft.Network/virtualNetworks/vnet-shared-prod-westus2-01/subnets/snet-ase-shared-prod-westus2-02'

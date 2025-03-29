@@ -1,0 +1,413 @@
+trigger: none
+
+pool: 'On-Prem-General'
+
+parameters:
+- name: environment
+  displayName: "Environment"
+  default: "Dev"
+  type: string
+  values:
+  - "Dev"  
+  - "Staging"
+  - "Prod" 
+
+# TODO: remove this as deploy.common.bicep is not used
+# - name: deployCommonServices
+#   displayName: "Deploy Common Services"
+#   default: false
+#   type: boolean
+
+- name: deployManagedIdentity
+  displayName: "Deploy Managed Identity"
+  default: false
+  type: boolean
+
+- name: deployKeyVault
+  displayName: "Deploy Key Vault"
+  default: false
+  type: boolean
+
+# - name: keyExpiryUpdate
+#   displayName: "Deploy key expiry"
+#   default: false
+#   type: boolean
+
+- name: updateKeys
+  displayName: "Deploy Secrets into Key Vault"
+  default: false
+  type: boolean
+  
+- name: deployStorage
+  displayName: "Deploy Storage Account"
+  default: false
+  type: boolean
+
+- name: deployAppConfig
+  displayName: "Deploy Application Config"
+  default: false
+  type: boolean
+
+- name: deployFunctionApp
+  displayName: "Deploy Function App"
+  default: false
+  type: boolean
+
+- name: deployWebApp
+  displayName: "Deploy Web App"
+  default: false
+  type: boolean
+
+- name: printDiagnostics
+  displayName: "Print diagnostics"
+  default: false
+  type: boolean
+
+- name: deleteResources
+  displayName: "DELETE Resources (DANGER step)"
+  default: false
+  type: boolean
+
+- name: dryRun
+  displayName: "DryRun the delete"
+  default: true
+  type: boolean
+
+- name: deployAPIM
+  displayName: "Deploy APIM"
+  default: false
+  type: boolean
+
+- name: retrieveKeys
+  displayName: "Retrieve Keys"
+  default: false
+  type: boolean  
+
+- name: excludedResourceIds
+  displayName: "Exclude ResourceID's for deletion"
+  default: ' '
+  type: object
+name: ${{ parameters.environment }} • $(Date:yyyyMMdd).$(Rev:r) • Infra
+variables:
+  - group: CORPS.MCA.CLM.${{ parameters.environment }}
+  - template: "Params/deployInfraParams-common.yaml"
+  - template: "Params/deployInfraParams.${{ parameters.environment }}.yaml"
+
+stages:
+- stage: Print_diagnostics
+  jobs:
+    - job: Print_diagnostics
+      displayName: Print diagnostics
+      condition: eq('${{ parameters.printDiagnostics }}', true)
+      steps:
+        - template: pipeline/print-diagnostics-steps.yaml
+
+    - job: Assign_Permissions
+      displayName: Assign permissions
+      condition: and(succeeded(), eq('${{ parameters.environment }}', 'Dev'), eq('${{ parameters.printDiagnostics }}', true))
+      steps:      
+        - template: pipeline/role-assignment-steps.yaml
+
+- stage: Prepare_Bicep_environment 
+  jobs:
+    - job: Bicep_Module_Deployment
+      condition: succeeded()
+      displayName: Load bicep modules
+      steps:
+        - task: AzureCLI@2
+          displayName: Restore Bicep Modules & Set Runtime Vars
+          inputs:
+            azureSubscription: ${{ variables.serviceConnectionName }}
+            addSpnToEnvironment: true
+            scriptType: 'pscore'
+            scriptLocation: inlineScript
+            inlineScript: |
+             # TODO: remove this as deploy.common.bicep is not used
+             #  bicep restore ${{ variables.commonBicepFilePath }} --force
+             #  bicep restore ${{ variables.funcAppBicepFilePath }} --force
+             #  bicep restore ${{ variables.webAppBicepFilePath }} --force
+             #  bicep restore $(Build.SourcesDirectory)/Deployment/deploy.managedIdentity.bicep --force
+             #  bicep restore $(Build.SourcesDirectory)/Deployment/deploy.keyvault.bicep --force
+             #  bicep restore $(Build.SourcesDirectory)/Deployment/deploy.storageAccount.bicep --force
+             #  bicep restore $(Build.SourcesDirectory)/Deployment/deploy.appConfig.bicep --force
+             Write-Host "##vso[task.setvariable variable=spnId]$env:servicePrincipalId"					# available via addSpnToEnvironment: true
+             Write-Host "##vso[task.setvariable variable=spnKey;issecret=true]$env:servicePrincipalKey" # available via addSpnToEnvironment: true
+       
+- stage: Cleanup_Deployment_Stage
+  jobs:
+    - job: CleanupAndTeardown
+      condition: and(succeededOrFailed(), eq('${{ parameters.deleteResources }}', 'true'))
+      displayName: Delete Resources In Resource Group
+      steps:
+        - task: AzureCLI@2
+          displayName: Clean out ${{ variables.resourceGroupName }}
+          inputs:
+            azureSubscription: ${{ variables.serviceConnectionName }}
+            addSpnToEnvironment: true
+            scriptType: "pscore"
+            scriptLocation: inlineScript
+            inlineScript: |
+              Write-Host "Connecting to Azure"
+              $secureSpnKey = ConvertTo-SecureString -String "$env:servicePrincipalKey" -AsPlainText -Force
+              $pscredential = New-Object -TypeName 'System.Management.Automation.PSCredential' -ArgumentList $env:servicePrincipalId, $secureSpnKey 
+              Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $env:TenantId
+
+              Set-AzContext -Tenant $env:TenantId -Subscription ${{ variables.azureSubscriptionName }}
+
+              Write-Host "Removing all locks from resources in the resource group"
+              Get-AzResourceLock -ResourceGroupName ${{ variables.resourceGroupName }} | Remove-AzResourceLock -Force
+              
+              # Read the list of resource IDs to exclude from the file
+              $excludedResourceIds = Get-Content -Path "$(Build.SourcesDirectory)/deployment/exclude/excludeResources.txt" | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
+              $resourceGroupResourceId = (Get-AzResourceGroup -Name ${{ variables.resourceGroupName }}).ResourceId
+              
+              Write-Host "Deleting resources in the resource group"
+              $resources = Get-AzResource -ResourceGroupName ${{ variables.resourceGroupName }}
+              $resources | ForEach-Object {
+                
+                if (($excludedResourceIds.Count -eq 0 -or $excludedResourceIds -notcontains $_.ResourceId) -and $_.ResourceId -ne $resourceGroupResourceId) {
+                  try {
+                      if ('${{ parameters.dryRun }}' -eq $false) {
+                        Write-Host "Deleting resource $($_.ResourceId)"
+                        Remove-AzResource -ResourceId "$($_.ResourceId)" -Force
+                      } else {
+                        Write-Host "Would delete resource $($_.ResourceId)"
+                      }
+                  } catch {
+                      Write-Error "Failed to delete resource $($_.ResourceId): $_"
+                  }
+                } else {
+                  Write-Host "Skipping resource $($_.ResourceId) due to exclusion list"
+                }
+                
+              }
+        # - task: AzurePowerShell@5
+        #   displayName: "Bicep Resource Group Cleanup"
+        #   inputs:
+        #     azureSubscription: $(serviceConnectionName)
+        #     scriptType: InlineScript
+        #     errorActionPreference: "stop"
+        #     azurePowerShellVersion: LatestVersion
+        #     inline: |
+        #      # Deletes all resources from the resource group
+        #      Set-AzContext -Subscription $(resourceGroupSubId)
+        #      New-AzResourceGroupDeployment -ResourceGroupName $(resourceGroupName) `
+        #      -Mode Complete `
+        #      -TemplateFile "$(Build.SourcesDirectory)/deployment/modules/clean-bicep-resources.bicep" `
+        #      -Force `
+        #      -Verbose
+
+- stage: Deploy_Common_services
+  jobs:
+    - job: Deploy_Common_Services
+      # condition: and(succeeded(), eq('${{ parameters.deployCommonServices }}', 'true'))
+      displayName: Deploy Common Services
+      steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Managed Identity
+        condition: eq('${{parameters.deployManagedIdentity}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: $(location)
+         deploymentName: 'Deploy_Infra-Identity_$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/Deployment/deploy.managedIdentity.bicep"
+         deploymentOutputs: deploymentOutputs
+         addSpnToEnvironment: true
+         overrideParameters: >
+           -environment ${{ parameters.environment }}
+
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Key Vault
+        condition: eq('${{parameters.deployKeyVault}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: $(location)
+         deploymentName: 'Deploy_Infra-KeyVault_$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/Deployment/deploy.keyvault.bicep"
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -groupObjectId $(Minions_DevsGroupObjectId)
+           -environment ${{ parameters.environment }}
+      
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: KeyVault Secrets Update
+        condition: eq('${{parameters.updateKeys}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: $(location)
+         deploymentName: 'Update-KeyVault-Secrets_$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/Deployment/deploy.kvupdate.bicep"
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -environment ${{ parameters.environment }}
+           -sequenceNumber $(sequenceNumber)
+           -DMSBlobContainerName $(DMSBlobContainerName)
+           -DMSBlobSubDirContractWorkItems $(DMSBlobSubDirContractWorkItems)
+           -DMSBlobTriggerPath $(DMSBlobTriggerPath)
+           -ironcladClientSecret $(ironcladClientSecret)
+
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Storage Account
+        condition: eq('${{parameters.deployStorage}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: $(location)
+         deploymentName: 'Deploy_Infra-Storage_$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/Deployment/deploy.storageAccount.bicep"
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -environment ${{ parameters.environment }}
+           -groupObjectId $(Minions_DevsGroupObjectId)
+           -resourceGroupName $(resourceGroupName)
+           -funcAppVirtualNetworkSubnetId $(funcAppVirtualNetworkSubnetId)
+      
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Application Config
+        condition: eq('${{parameters.deployAppConfig}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: $(location)
+         deploymentName: 'Deploy_Infra-AppConfig_$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: ${{ variables.resourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/Deployment/deploy.appConfig.bicep"
+         deploymentOutputs: deploymentOutputs
+         addSpnToEnvironment: true
+         overrideParameters: >
+           -servicePrincipalId $(spnId)
+           -servicePrincipalKey "$(spnKey)"
+           -environment ${{ parameters.environment }}
+           -resourceGroupName $(resourceGroupName)
+           -dmsStorageAccountName $(dmsStorageAccountName)
+
+      # - task: AzurePowerShell@5
+      #   condition: eq('${{parameters.keyExpiryUpdate}}', true)
+      #   displayName: Key Expiry Update
+      #   inputs:
+      #    azureSubscription: "${{ variables.azureSubscriptionName }}"
+      #    connectedServiceNameARM: ${{ variables.serviceConnectionName }}
+      #    inline: |
+      #         $Expires = (Get-Date).AddYears(10).ToUniversalTime()
+          
+      #         $kvName = "kvclmmcadvw201"
+      #         if ("${{ parameters.environment }}" -eq "Staging") {
+      #           $kvName = "kvclmmcastw201"
+      #         } elseif ("${{ parameters.environment }}" -eq "Prod") {
+      #           $kvName = "kvclmmcapdw201"
+      #         }
+
+      #         Set-AzKeyVaultKeyAttribute -VaultName $kvName -Name 'keyEncryptionKey' -Expires $Expires -Enable $True -PassThru
+
+      #    scriptType: InlineScript
+      #    errorActionPreference: "stop"
+      #    azurePowerShellVersion: LatestVersion
+      #    pwsh: true
+
+      # - template: pipeline/set-deployment-output-var-steps.yaml
+      # condition: or(eq('${{parameters.deployManagedIdentity}}', true), eq('${{parameters.deployKeyVault}}', true), eq('${{parameters.deployStorage}}', true))
+
+- stage: Deploy_Function_App_Infra
+  jobs:
+    - job: Deploy_Function_App_Infra
+      condition: and(succeeded(), eq('${{ parameters.deployFunctionApp }}', 'true'))
+      displayName: Deploy Function App Infra
+      steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Function App Infra
+        condition: eq('${{parameters.deployFunctionApp}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         addSpnToEnvironment: true
+         location: $(location)
+         deploymentName: 'Deploy_Infra_Func_App-$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: $(serviceConnectionName)
+         resourceGroupName: $(resourceGroupName)
+         csmFile: $(funcAppBicepFilePath)
+        #  csmParametersFile: $(funcAppBicepParamFilePath)
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -servicePrincipalId $(spnId)
+           -servicePrincipalKey "$(spnKey)"
+           -environment ${{ parameters.environment }}
+           -serverFarmResourceId $(serverFarmResourceId)
+           -enableHealthCheckMonitor $(enableHealthCheckMonitor)
+           -healthCheckPath "/health"
+           -location $(location)
+           -resourceGroupName $(resourceGroupName)
+           -dmsStorageAccountName $(dmsStorageAccountName)
+
+      - template: pipeline/set-deployment-output-var-steps.yaml
+
+- stage: Deploy_Web_App_Infra
+  jobs:
+    - job: Deploy_Web_App_Infra
+      condition: and(succeeded(), eq('${{ parameters.deployWebApp }}', 'true'))
+      steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy Web App Infra
+        condition: eq('${{parameters.deployWebApp}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         addSpnToEnvironment: true
+         location: $(location)
+         deploymentName: 'Deploy_Infra_Web_App-$(sequenceNumber)-$(deploymentDateTimeStamp)'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         resourceGroupName: $(resourceGroupName)
+         csmFile: $(webAppBicepFilePath)
+        #  csmParametersFile: $(webAppBicepLParamFilePath)
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+           -servicePrincipalId $(spnId)
+           -servicePrincipalKey "$(spnKey)"
+           -environment ${{ parameters.environment }}
+           -serverFarmResourceId $(serverFarmResourceId)
+           -enableHealthCheckMonitor $(enableHealthCheckMonitor)
+           -healthCheckPath "/health"
+           -location $(location)
+           -resourceGroupName $(resourceGroupName)
+
+      - template: pipeline/set-deployment-output-var-steps.yaml
+
+- stage: Deploy_APIM
+  jobs:
+    - job: Deploy_APIM
+      condition: and(succeeded(), eq('${{ parameters.deployAPIM }}', 'true'))
+      steps:
+      - task: AzureResourceManagerTemplateDeployment@3
+        displayName: Deploy APIM      
+        condition: eq('${{parameters.deployAPIM}}', true)
+        inputs:        
+         deploymentScope: 'Resource Group'
+         location: 'westus2'
+         deploymentName: 'DeployAPIM'
+         azureResourceManagerConnection: ${{ variables.serviceConnectionName }}
+         addSpnToEnvironment: true
+         resourceGroupName: ${{ variables.apimResourceGroupName }}
+         csmFile: "$(Build.SourcesDirectory)/deployment/APIM/deploy.apim.${{ parameters.environment }}.bicep"
+         deploymentOutputs: deploymentOutputs
+         overrideParameters: >
+          -environment ${{ parameters.environment }}
+          -sequenceNumber $(sequenceNumber)
+     
+      - task: AzurePowerShell@5
+        condition: eq('${{parameters.retrieveKeys}}', true)
+        displayName: Retrieve Keys
+        inputs:
+          azureSubscription: "${{ variables.azureSubscriptionName }}"
+          connectedServiceNameARM: ${{ variables.serviceConnectionName }}
+          inline: |
+            $apimContext = New-AzApiManagementContext -ResourceGroupName "${{variables.apimResourceGroupName}}" -ServiceName "apim-shared-ecp-${{parameters.environment}}-westus2-01";
+            $apimProduct = Get-AzApiManagementSubscription -Context $apimContext -ProductId "CORPSCLMMCAAPIProduct"
+            Get-AzApiManagementSubscriptionKey -Context $apimContext -SubscriptionId $apimProduct.SubscriptionId;
+          scriptType: InlineScript
+          errorActionPreference: "stop"
+          azurePowerShellVersion: LatestVersion
+          pwsh: true    

@@ -1,0 +1,59 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+      "title": "CORPS CLM MCA API",
+      "description": "",
+      "version": "1.0"
+  },
+  "servers": [
+      {
+          "url": "{{serversUrl}}"
+      }
+  ],
+"paths": {
+  "/v1.0/webhook-intake": {
+    "post": {
+      "summary": "webhook-intake",
+      "operationId": "webhook-intake",
+      "responses": {
+        "200": {
+          "description": "Webhook intake operation executed successfully."
+        }
+      }
+    }
+  },
+  "/v1.0/health": {
+    "get": {
+      "summary": "health",
+      "operationId": "health",
+      "responses": {
+        "200": {
+          "description": null
+        }
+      }
+    }
+  }
+},
+  "components": {
+      "securitySchemes": {
+          "apiKeyHeader": {
+              "type": "apiKey",
+              "name": "Ocp-Apim-Subscription-Key",
+              "in": "header"
+          },
+          "apiKeyQuery": {
+              "type": "apiKey",
+              "name": "subscription-key",
+              "in": "query"
+          }
+      }
+  },
+  "security": [
+      {
+          "apiKeyHeader": []
+      },
+      {
+          "apiKeyQuery": []
+      }
+  ]
+}

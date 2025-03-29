@@ -1,0 +1,5 @@
+/subscriptions/59ef3d6b-57e9-4621-b22b-c8eb08a308e9/resourceGroups/rg-ContractLCMAutoDev-Minions-dev-westus2-01/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-clm-mca-dv-westus2-01
+/subscriptions/59ef3d6b-57e9-4621-b22b-c8eb08a308e9/resourceGroups/rg-ContractLCMAutoDev-Minions-dev-westus2-01/providers/Microsoft.AppConfiguration/configurationStores/appcs-clm-mca-dv-westus2-01
+/subscriptions/59ef3d6b-57e9-4621-b22b-c8eb08a308e9/resourceGroups/rg-ContractLCMAutoDev-Minions-dev-westus2-01/providers/Microsoft.KeyVault/vaults/kvclmmcadvw201
+/subscriptions/59ef3d6b-57e9-4621-b22b-c8eb08a308e9/resourceGroups/rg-ContractLCMAutoDev-Minions-dev-westus2-01/providers/Microsoft.Network/privateEndpoints/pep-kvclmmcadvw201-vault-0
+/subscriptions/59ef3d6b-57e9-4621-b22b-c8eb08a308e9/resourceGroups/rg-ContractLCMAutoDev-Minions-dev-westus2-01/providers/Microsoft.Network/networkInterfaces/pep-kvclmmcadvw201-vault-0.nic.30747192-040c-4e4b-a264-13ed03995629

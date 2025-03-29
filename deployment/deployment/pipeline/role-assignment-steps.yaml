@@ -1,0 +1,16 @@
+steps:      
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: $(serviceConnectionName) 
+            scriptType: 'ps'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              'Get-AzAppConfigurationStoreKey -ResourceGroupName $(resourceGroupName) -Name appcs-mca-corps-dev-westus2-02 -SubscriptionId $(resourceGroupSubId)'
+
+        - task: AzureCLI@2
+          inputs:
+           azureSubscription: $(serviceConnectionName)
+           scriptType: 'ps'
+           scriptLocation: 'inlineScript'
+           inlineScript: |
+              az role assignment create --role Contributor --scope /subscriptions/$(resourceGroupSubId)/resourceGroups/$(resourceGroupName) --assignee-object-id $(Minions_DevsGroupObjectId) --assignee-principal-type Group --description "Role assignment to have contributor access to resource group"

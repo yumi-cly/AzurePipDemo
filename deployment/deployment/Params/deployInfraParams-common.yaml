@@ -1,0 +1,20 @@
+variables:
+  Major: $[ format('{0:yyyy}', pipeline.startTime) ]
+  Minor: $[ format('{0:MM}', pipeline.startTime) ]
+  Patch: $[ format('{0:dd}', pipeline.startTime) ]
+  gitsha: "$(Build.SourceVersion)"
+  standardVersion: $[variables['Build.BuildNumber']]
+  srcDir: "src"
+  testsDir: "tests"
+  group: MCA.CLM.${{ parameters.environment }}
+  deploymentDate: $[format('{0:dd}.{0:MM}.{0:yyyy}', pipeline.startTime)]
+  deploymentDateTimeStamp: $[format('{0:yyyyMMddHHmmss}', pipeline.startTime)]
+  commonBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.common.bicep'
+  azStorageBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.azurestorage.bicep'
+  funcAppBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.funcapp.bicep'
+  webAppBicepFilePath: '$(Build.SourcesDirectory)\deployment\deploy.webapp.bicep'
+  enableHealthCheckMonitor: true
+  Minions_DevsGroupObjectId: '98525d4d-de1d-4985-a593-a9c116568045'
+  location: 'WestUS2'
+  #deploymentName: $[deployment().name]
+  #system.debug: 'true' # extremey noisy, useful when troubleshooting data inputs between calling modules

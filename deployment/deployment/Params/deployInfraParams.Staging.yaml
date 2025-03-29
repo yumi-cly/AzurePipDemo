@@ -1,0 +1,12 @@
+variables:
+  serviceConnectionName: 'pbc-vsts-Minions-staging-2p0' # "Provide service connection use for the deployment"
+  resourceGroupName: 'rg-ContractLCMAutoACPT-Minions-staging-westus2-01' # "Provide resource group destination for the deployment"
+  resourceGroupSubId: 'b75cfcab-acb3-43c6-a5d7-68aefe58df5f'
+  sharedResourcesRg: 'rg-TeamShared-Minions-staging-westus2-01' # "Name of the resource group for components shared between apps"
+  azureSubscriptionName: 'pbc-shared-staging'
+  resourceName: '{"applicationName":"CLM","departmentCode":"MCA","environment":"Staging","sequenceNumber":"01"}'
+  serverFarmResourceId: '/subscriptions/b75cfcab-acb3-43c6-a5d7-68aefe58df5f/resourceGroups/rg-TeamShared-Minions-staging-westus2-01/providers/Microsoft.Web/serverFarms/plan-TeamShared-Minions-staging-w2-01'
+  sequenceNumber: '01'
+  apimResourceGroupName: 'rg-apim-shared-ecp-staging-westus2-01'
+  dmsStorageAccountName: 'stdmspdmsstgw201nssa' # "Provide the name of the storage account for DMS project"
+  funcAppVirtualNetworkSubnetId: '/subscriptions/b75cfcab-acb3-43c6-a5d7-68aefe58df5f/resourceGroups/rg-shared-staging-westus2-01/providers/Microsoft.Network/virtualNetworks/vnet-shared-staging-westus2-01/subnets/snet-ase-shared-staging-westus2-02'

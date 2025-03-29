@@ -1,0 +1,254 @@
+trigger: none
+
+pool: 
+  name: 'On-Prem-General'
+
+parameters:
+- name: buildConfiguration
+  displayName: "Build Configuration"
+  type: string
+  default: "Release"
+  values:
+  - "Debug"
+  - "Release"
+- name: enableFortifyOnDemandStatic
+  displayName: "Snyk Scan Enabled"
+  type: boolean
+  default: false
+- name: enableWhitesource
+  displayName: "Whitesource Enabled"
+  type: boolean
+  default: true
+- name: enableTest
+  displayName: "Run Unit Tests"
+  type: boolean
+  default: true
+- name: allowFailBuild
+  displayName: "XRay Scan Allow Fail Build"
+  type: boolean
+  default: true
+
+stages:
+- stage: BuildStage
+  displayName: Build Stage
+  jobs:
+  - job: Build
+
+    variables:
+    - template: "Params/deployInfraParams-common.yaml"
+    - name: SolutionPath
+      value: '$(Build.SourcesDirectory)/CLMAutomation.sln' #todo: update path  
+    - group: CORPS.MCA.CLM.Dev
+    - name: "AccessTokenHelper.ClientSecret"
+      value: $(ironcladClientSecret) 
+  
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use DotNetFrameworkVersion'
+      inputs:
+        version: '8.0.x'
+
+    - task: JFrogToolsInstaller@1
+      inputs:
+        artifactoryConnection: 'jFrog-Cors-Dev'
+        cliInstallationRepo: 'jfrog-remote'
+
+    - task: JFrogDotnetCore@1
+      inputs:
+        displayName: 'JFrogDotnetCore Restore (info)'
+        command: 'restore'
+        artifactoryConnection: 'jFrog-Cors-Dev'
+        targetResolveRepo: 'cors-nuget'
+        rootPath: '$(Build.SourcesDirectory)\CLMAutomation.sln'
+        collectBuildInfo: true
+        buildName: '$(build.DefinitionName)'
+        buildNumber: '$(build.BuildNumber)'
+        projectKey: 'cors'
+        packagesDirectory: '$(Build.ArtifactStagingDirectory)\nuget'
+        verbosityRestore: None
+        includeEnvVars: true
+        nugetProtocolVersion: 'v3'
+
+    - task: SonarQubePrepare@7
+      displayName: 'Prepare analysis on SonarQube'
+      inputs:
+        SonarQube: "SonarQube Prod"
+        projectKey: "$(Build.DefinitionName)"
+        projectName: "$(Build.DefinitionName)"
+        extraProperties: |
+          sonar.scanner.skipJreProvisioning=true
+          sonar.exclusions=**/wwwroot/lib/**
+          sonar.cs.opencover.reportsPaths=**/coverage.opencover.xml
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build CLMAutomation Sln'
+      inputs:
+        command: 'build' 
+        projects: '${{ variables.SolutionPath }}'
+        arguments: '--configuration ${{ parameters.buildConfiguration }} --no-restore'
+    
+    - task: whitesource@21
+      enabled: ${{ parameters.enableWhitesource }}
+      displayName: 'Whitesource'
+      inputs:
+        cwd: '$(build.sourcesdirectory)\CORPS_CL_CLM_Automation_Service'
+        projectName: 'CORPS_CL_CLM_Automation_Service'
+        scanReportTimeout: '1'
+        configuration: |
+            nuget.runPreStep=false
+            resolveAllDependencies=false
+            fileSystemScan=false
+            excludes=**/*.gem **/*test* **/.nuget/packages/** **\.nuget\packages\**
+      continueOnError: true
+
+    - task: VSTest@3
+      enabled: ${{ parameters.enableTest }} #todo
+      displayName: Run Unit Tests
+      inputs:
+        testAssemblyVer2: |
+          **\*tests*.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        runTestsInIsolation: true
+        publishRunAttachments: false
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Execute Tests'
+      inputs:
+        command: test
+        projects: |
+         $(Build.SourcesDirectory)/[Tt]ests/**/*.csproj
+        arguments: '--configuration ${{ parameters.BuildConfiguration }} --no-build --no-restore --results-directory $(Build.SourcesDirectory)/TestResults --filter Traits!~Integration --collect:"XPlat Code Coverage" --logger trx --settings $(Build.SourcesDirectory)/coverlet.runsettings'
+        publishTestResults: false
+      env:
+        ironcladClientSecret: $(ironcladClientSecret)
+
+    - task: PublishTestResults@2
+      displayName: 'Publish Test Results'
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '**/TestResults/*.trx'
+        searchFolder: '$(Build.SourcesDirectory)'
+        mergeTestResults: true
+        buildConfiguration: ${{ parameters.BuildConfiguration }}
+      condition: succeededOrFailed()
+
+    - task: reportgenerator@5
+      displayName: 'Merge Code Coverage Results'
+      inputs:
+        reports: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
+        targetdir: '$(Build.ArtifactStagingDirectory)/coverlet'
+        reporttypes: Cobertura
+      condition: succeededOrFailed()
+
+    - task: PublishCodeCoverageResults@2
+      displayName: 'Publish code coverage'
+      inputs:
+        summaryFileLocation: '$(Build.ArtifactStagingDirectory)/coverlet/Cobertura.xml'
+        failIfCoverageEmpty: true
+      condition: succeededOrFailed()
+    
+    - task: SonarQubeAnalyze@7
+      displayName: 'Run Code Analysis'
+      inputs:
+        jdkversion: 'JAVA_HOME_11_X64'
+
+    - task: SonarQubePublish@7
+      displayName: 'Publish Quality Gate Result'
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - task: Snyk.snyk-security-scan.custom-build-release-task.SnykSecurityScan@1
+      displayName: 'Snyk scan for open source vulnerabilities'
+      inputs:
+        serviceConnectionEndpoint: 'Snyk-Cors'
+        testType: code
+        projectName: '$(Build.DefinitionName)-Build'
+        organization: 'corporate-services-cpg'
+        additionalArguments: '--report -d'
+
+    - task: sonar-buildbreaker@8
+      displayName: 'Break build on SonarQube quality gate failure'
+      inputs:
+        SonarQube: "SonarQube Prod"
+
+    - task: DeleteFiles@1
+      displayName: 'Delete files from $(build.ArtifactStagingDirectory) left by coverlet and sq'
+      inputs:
+        SourceFolder: '$(build.ArtifactStagingDirectory)'
+        Contents: '.sq*'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        zipAfterPublish: false
+        projects: '$(Build.SourcesDirectory)/src/**/*.csproj'
+        arguments: '--configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory) --no-restore'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/CLMAutomation.Orchestrator.Functions'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/CLMAutomation.Orchestrator.Functions.zip'
+        replaceExistingArchive: true    
+          
+
+    - task: JFrogDiscardBuilds@1
+      displayName: 'JFrog Discard Old Builds and Artifacts'
+      inputs:
+        artifactoryConnection: 'jFrog-Cors-Dev'
+        buildName: '$(Build.DefinitionName)'
+        projectKey: 'cors'
+        maxDays: 60
+        maxBuilds: 75
+        deleteArtifacts: true
+        async: false
+
+    - task: JFrogGenericArtifacts@1
+      displayName: 'JFrog Upload Artifacts'
+      inputs:
+        command: 'Upload'
+        connection: 'jFrog-Cors-Dev'
+        specSource: 'taskConfiguration'
+        fileSpec: |
+          {
+            "files": [
+              {
+                "pattern": "$(Build.ArtifactStagingDirectory)/CLMAutomation.Orchestrator.Functions.zip",
+                "target": "cors-art-non/CORPS_CL_CLM_Automation_Service/FuncApp/$(Build.BuildNumber)/",
+                "recursive": "true"
+              }
+            ]
+          }
+        collectBuildInfo: true
+        buildName: '$(Build.DefinitionName)'
+        buildNumber: '$(Build.BuildNumber)'
+        projectKey: 'cors'
+        failNoOp: true
+  
+    - task: JFrogPublishBuildInfo@1
+      displayName: 'JFrog Publish Build Info'
+      inputs:
+        artifactoryConnection: 'jFrog-Cors-Dev'
+        buildName: '$(Build.DefinitionName)'
+        buildNumber: '$(Build.BuildNumber)'
+        projectKey: 'cors'
+        
+    - task: JFrogBuildScan@1
+      displayName: 'JFrog Build Scan'
+      inputs:
+        xrayConnection: 'jFrog-Cors-xRay'
+        buildName: '$(Build.DefinitionName)'
+        buildNumber: '$(Build.BuildNumber)'
+        projectKey: 'cors'
+        allowFailBuild: ${{ parameters.allowFailBuild }}
+        vuln: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish build artifacts'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/CLMAutomation.Orchestrator.Functions.zip'
+        artifactName: drop  

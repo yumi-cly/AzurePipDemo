@@ -1,0 +1,42 @@
+<!--
+    IMPORTANT:
+    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.
+    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.
+    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.
+    - To add a policy, place the cursor at the desired insertion point and select a policy from the sidebar.
+    - To remove a policy, delete the corresponding policy statement from the policy document.
+    - Position the <base> element within a section element to inherit all policies from the corresponding section element in the enclosing scope.
+    - Remove the <base> element to prevent inheriting policies from the corresponding section element in the enclosing scope.
+    - Policies are applied in the order of their appearance, from the top down.
+    - Comments within policy elements are not supported and may disappear. Place your comments between policy elements or at a higher level scope.
+-->
+<!-- <policies>
+    <inbound> -->
+        <!--<set-variable name="reason" value="@{ string[] allowedIssuerSubjectPairs = {"CN=Premera SubCA 3, DC=corp, DC=premera, DC=org | CN=api.dev.premera.com, O=Premera Blue Cross, L=Mountlake Terrace, S=Washington, C=US"}; string algorithmFriendlyName = "sha256RSA"; try { System.Security.Cryptography.X509Certificates.X509Certificate2 certificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(Convert.FromBase64String(context.Request.Headers["X-ARR-ClientCert"][0])); if (certificate.NotAfter < DateTime.Now) { return "Invalid client certificate - lifetime"; } if (!allowedIssuerSubjectPairs.Contains(certificate.Issuer + " | " + certificate.Subject)) { return "Invalid client certificate issuer or subject"; } if (certificate.SignatureAlgorithm.FriendlyName != algorithmFriendlyName) { return "Invalid client certificate Signature Algorithm"; } return ""; } catch { return "Invalid client certificate. Not a valid X509 certificate."; } }" />
+        <choose>
+            <when condition="@(context.Variables.GetValueOrDefault<string>("reason") != "")">
+                <return-response>
+                    <set-status code="403" reason="@(context.Variables.GetValueOrDefault<string>("reason"))" />
+                </return-response>
+            </when>
+        </choose>-->
+		<!-- <validate-client-certificate validate-revocation="false" validate-trust="false" validate-not-before="true" validate-not-after="true" ignore-error="false">
+			<identities>
+				<identity
+					subject="CN=clmmca.test.premera.com, O=Premera Blue Cross, L=Mountlake Terrace, S=Washington, C=US"
+					issuer-subject="CN=GlobalSign RSA OV SSL CA 2018, O=GlobalSign nv-sa, C=BE" />
+			</identities>
+		</validate-client-certificate>
+        <base /> -->
+        <!--<authentication-certificate certificate-id="corpsclmmca-dev-premera" />-->
+    <!-- </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies> -->

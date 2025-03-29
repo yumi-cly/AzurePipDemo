@@ -1,0 +1,29 @@
+steps:
+  - task: AzureCLI@2
+    displayName: Clean out ${{ variables.resourceGroupName }}
+    inputs:
+      azureSubscription: ${{ variables.serviceConnectionName }}
+      addSpnToEnvironment: true
+      scriptType: "pscore"
+      scriptLocation: inlineScript
+      inlineScript: |
+        Write-Host "Connecting to Azure"
+        $secureSpnKey = ConvertTo-SecureString -String "$env:servicePrincipalKey" -AsPlainText -Force
+        $pscredential = New-Object -TypeName 'System.Management.Automation.PSCredential' -ArgumentList $env:servicePrincipalId, $secureSpnKey 
+        Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $env:TenantId
+
+        Set-AzContext -Tenant $env:TenantId -Subscription ${{ variables.azureSubscriptionName }}
+
+        Write-Host "Removing all locks from resources in the resource group"
+        Get-AzResourceLock -ResourceGroupName ${{ variables.resourceGroupName }} | Remove-AzResourceLock -Force
+
+        Write-Host "Deleting resources in the resource group"
+        $resources = Get-AzResource -ResourceGroupName ${{ variables.resourceGroupName }}
+        $resources | ForEach-Object {
+          try {
+              Write-Host "Deleting resource $($_.ResourceId)"
+              Remove-AzResource -ResourceId $_.ResourceId -Force
+          } catch {
+              Write-Error "Failed to delete resource $($_.ResourceId): $_"
+          }
+        }
