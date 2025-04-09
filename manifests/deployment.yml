@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: htdevopspipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: htdevopspipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: htdevopspipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: htdevopspipelinesjavascriptdocker 
+          image: genaicontainrregistry.azurecr.io/htdevopspipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
