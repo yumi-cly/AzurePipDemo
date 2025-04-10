@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: htdevopspipelinesjavascriptdocker 
-          image: genaicontainrregistry.azurecr.io/htdevopspipelinesjavascriptdocker
+          image: genaicontainrreg.azurecr.io/htdevopspipelinesjavascriptdocker
           ports:
           - containerPort: 8080
