@@ -56,7 +56,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'HTDevopspipelinesjavascriptdocker-5226.default'
+    environment: 'DEV.default'
     strategy:
       runOnce:
         deploy:
@@ -86,7 +86,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
-    environment: 'HTDevopspipelinesjavascriptdocker-5226.$(k8sNamespaceForPR)'
+    environment: 'DEV.$(k8sNamespaceForPR)'
     strategy:
       runOnce:
         deploy:
