@@ -13,7 +13,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'b2c73895-a64f-408e-80f8-2f2a4bd8e959'
   imageRepository: 'htdevopspipelinesjavascriptdocker'
-  containerRegistry: 'genaicontainrregistry.azurecr.io'
+  containerRegistry: 'genaicontainrreg.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'genaicontainrregistry634b-auth'
