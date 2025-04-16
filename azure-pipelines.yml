@@ -59,7 +59,7 @@ stages:
     - upload: manifests
       artifact: manifests
 
-- stage: Deploy to Dev
+- stage: Deploy_to_Dev
   displayName: Deploy stage
   dependsOn: Build
   condition: |
@@ -155,7 +155,7 @@ stages:
                 message="${message} and is available at $url.<br><br>[Learn More](https://aka.ms/testwithreviewapps) about how to test and provide feedback for the app."
               fi
               echo "##vso[task.setvariable variable=GITHUB_COMMENT]$message"
-- stage: Deploy to Prod
+- stage: Deploy_to_Prod
   displayName: Deploy stage
   dependsOn: Build
   condition: |
