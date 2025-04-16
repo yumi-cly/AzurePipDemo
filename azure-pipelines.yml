@@ -197,7 +197,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
 
-    environment: 'DEV.$(k8sNamespaceForPR)'
+    environment: 'PROD.$(k8sNamespaceForPR)'
     strategy:
       runOnce:
         deploy:
